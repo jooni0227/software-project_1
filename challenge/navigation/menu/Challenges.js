@@ -18,10 +18,9 @@ import React from "react";
 export default function Challenges({ navigation }) {
   const [show, setShow] = useState(true);
 
-  const handleButtonClick = () => { //도전시작 버튼클릭시 도장판
+  const handleButtonClick = () => {
     setShow(false);
   };
-  
 
   const [clickableIndex, setClickableIndex] = useState(0);
   const [checkclick, setClick] = useState(new Array(30).fill(false));
@@ -70,14 +69,14 @@ export default function Challenges({ navigation }) {
   };
   const handleButtonPress = (index) => {
     // 도장 찍는 날을 제외하고는 터치불가
-    //if (index !== clickableIndex) {
-    //return;
-    //}
+    if (index !== clickableIndex) {
+    return;
+    }
 
     const newcheckclick = [...checkclick];
     newcheckclick[index] = true;
     setClick(newcheckclick);
-    //setClickableIndex(clickableIndex + 1);
+    setClickableIndex(clickableIndex + 1);
 
     if (index === 29) {
       // Modal 컴포넌트를 열어 성공 메시지를 띄움
@@ -135,8 +134,6 @@ export default function Challenges({ navigation }) {
     
   };
 
-  
-
   return (
     <View style={styles.container}>
       {show ? (
@@ -152,12 +149,12 @@ export default function Challenges({ navigation }) {
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
           >
-            <View style={styles.header}>
-              <Text style={{ fontSize: 30 }}>ID</Text>
-              <Text style={{ fontSize: 30 }}>D-{30 - clickableIndex}</Text>
-            </View>
+          <View style={styles.header}>
+            <Text style={{ fontSize: 30 }}>ID</Text>
+            <Text style={{ fontSize: 30 }}>D-{30 - clickableIndex}</Text>
+          </View>
 
-            <View style={styles.checkcontainer}>
+          <View style={styles.checkcontainer}>
               {rows.map((row, rowIndex) => (
                 <View
                   style={{ justifyContent: "center", flexDirection: "row" }}
@@ -170,11 +167,7 @@ export default function Challenges({ navigation }) {
                         key={index}
                         onPress={() => handleButtonPress(index)}
                         style={{
-                          backgroundColor: state
-                            ? "green"
-                            : index === clickableIndex
-                            ? "gray"
-                            : "lightgray",
+                          backgroundColor: state ? "green" : index === clickableIndex  ? "gray"  : "lightgray",
                           padding: 10,
                           marginRight: itemIndex === itemsPerRow - 1 ? 0 : 10,
                           marginTop: 20,
@@ -184,7 +177,7 @@ export default function Challenges({ navigation }) {
                           borderWidth: 1,
                           alignItems: "center",
                         }}
-                        //disabled={index !== clickableIndex}
+                        disabled={index !== clickableIndex}
                       >
                       <Text style={{ color: 'white' , fontSize:20}}>{index + 1}</Text>
                     </TouchableOpacity>
@@ -193,10 +186,10 @@ export default function Challenges({ navigation }) {
               </View>
             ))}
           </View>
-          <Button title="재도전하기" onPress={retryAlert } />
-            
+
+          <Button title="재도전하기" onPress={retryAlert}/>
           </ScrollView>
-          <Modal animationType="slide" transparent={true} visible={showModal}> 
+          <Modal animationType="slide" transparent={true} visible={showModal}>
             <View style={styles.modalBackground}>
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>
@@ -277,6 +270,21 @@ const styles = StyleSheet.create({
     flex:1.5,
     justifyContent:"center",
     backgroundColor:"white",
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 130,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   modalBackground: {
     position: 'absolute',
