@@ -64,9 +64,6 @@ export default function Challenges({ navigation }) {
 
   const [showModal, setShowModal] = useState(false);
 
-  const closeModal = () => {
-    setShowModal(false);
-  };
   const handleButtonPress = (index) => {
     // 도장 찍는 날을 제외하고는 터치불가
     if (index !== clickableIndex) {
@@ -201,9 +198,9 @@ export default function Challenges({ navigation }) {
                       marginTop: 10,
                       borderRadius: 5,
                     }}
-                    onPress={closeModal}
+                    onPress={retryAlert}
                   >
-                    <Text style={{ fontSize: 20 }}>닫기</Text>
+                    <Text style={{ fontSize: 20 }}>재도전</Text>
                   </TouchableOpacity>
                 </View>
               </View>
