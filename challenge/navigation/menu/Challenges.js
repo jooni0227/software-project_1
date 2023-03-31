@@ -63,6 +63,8 @@ export default function Challenges({ navigation }) {
   const count = 1;
 
   const [showModal, setShowModal] = useState(false);
+  
+  const [showFailModal, setShowFailModal] = useState(false);
 
   const handleButtonPress = (index) => {
     // 도장 찍는 날을 제외하고는 터치불가
@@ -75,9 +77,12 @@ export default function Challenges({ navigation }) {
     setClick(newcheckclick);
     setClickableIndex(clickableIndex + 1);
 
-    if (index === 29) {
-      // Modal 컴포넌트를 열어 성공 메시지를 띄움
+    if (clickableIndex >= 20 && index===29) {
+      // 도장을 20개 이상 채울 경우 챌린지 성공!,Modal 컴포넌트를 열어 성공 메시지를 띄움
       setShowModal(true);
+    } else if (clickableIndex < 20 && index===29) {
+      // 도장을 20개 미만으로 채울 경우 챌린지 실패!,Modal 컴포넌트를 열어 실패 메시지를 띄움
+      setShowFailModal(true);
     }
   };
 
@@ -93,8 +98,6 @@ export default function Challenges({ navigation }) {
 
     return resultArray;
   }, []);
-
-  //asfd
 
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -191,6 +194,26 @@ export default function Challenges({ navigation }) {
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                   <Text style={{ fontSize: 30 }}>성공!</Text>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: "lightgray",
+                      padding: 10,
+                      marginTop: 10,
+                      borderRadius: 5,
+                    }}
+                    onPress={retryAlert}
+                  >
+                    <Text style={{ fontSize: 20 }}>재도전</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
+          <Modal animationType="slide" transparent={true} visible={showFailModal}>
+            <View style={styles.modalBackground}>
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <Text style={{ fontSize: 30 }}>실패!</Text>
                   <TouchableOpacity
                     style={{
                       backgroundColor: "lightgray",
