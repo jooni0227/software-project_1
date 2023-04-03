@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions} from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ScrollView} from 'react-native';
 import CalendarPicker from 'react-native-calendar-picker';
 import moment from 'moment';
 import {BarChart} from 'react-native-chart-kit';
@@ -34,6 +34,7 @@ const MyComponent = () => {
 
   
   return (
+    <ScrollView>
     <View style={styles.container} >
       <CalendarPicker onDateChange={handleDateSelect} />
       {showForm && (
@@ -89,9 +90,8 @@ const MyComponent = () => {
       />
         </View>
     )}
-
-      
     </View>
+    </ScrollView>
   );
 };
 
