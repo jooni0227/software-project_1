@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ScrollView} from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ScrollView, Alert} from 'react-native';
 import CalendarPicker from 'react-native-calendar-picker';
 import moment from 'moment';
 import {BarChart} from 'react-native-chart-kit';
@@ -39,7 +39,7 @@ const MyComponent = () => {
       <CalendarPicker onDateChange={handleDateSelect} />
       {showForm && (
         <View>
-          <Text style={styles.text}>You selected {moment(selectedDay).format('MM/DD/YYYY')}</Text>
+          <Text style={styles.text}> {moment(selectedDay).format('MM')}월 {moment(selectedDay).format('DD')}일 </Text>
           <FormComponent
             onSubmit={handleFormSubmit}
             initialData={formData[moment(selectedDay).format('MM/DD/YYYY')]}
@@ -99,11 +99,15 @@ const FormComponent = ({ onSubmit, initialData }) => {
   const [formData, setFormData] = useState(initialData || {});
 
   const handleInputChange = (name, value) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-   
+    if(isNaN(value)){
+      Alert.alert('Error','숫자로 입력해주세요.');
+    }
+    else{
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = () => {
@@ -163,6 +167,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   text:{
+    padding:10,
     fontSize: 20,
   }
 });
