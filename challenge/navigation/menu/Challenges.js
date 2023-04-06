@@ -63,10 +63,9 @@ export default function Challenges({ navigation }) {
   const count = 1;
 
   const [showModal, setShowModal] = useState(false);
+  
+  const [showFailModal, setShowFailModal] = useState(false);
 
-  const closeModal = () => {
-    setShowModal(false);
-  };
   const handleButtonPress = (index) => {
     // 도장 찍는 날을 제외하고는 터치불가
     if (index !== clickableIndex) {
@@ -78,9 +77,12 @@ export default function Challenges({ navigation }) {
     setClick(newcheckclick);
     setClickableIndex(clickableIndex + 1);
 
-    if (index === 29) {
-      // Modal 컴포넌트를 열어 성공 메시지를 띄움
+    if (clickableIndex >= 20 && index===29) {
+      // 도장을 20개 이상 채울 경우 챌린지 성공!,Modal 컴포넌트를 열어 성공 메시지를 띄움
       setShowModal(true);
+    } else if (clickableIndex < 20 && index===29) {
+      // 도장을 20개 미만으로 채울 경우 챌린지 실패!,Modal 컴포넌트를 열어 실패 메시지를 띄움
+      setShowFailModal(true);
     }
   };
 
@@ -97,8 +99,6 @@ export default function Challenges({ navigation }) {
     return resultArray;
   }, []);
 
-  //asfd
-
   const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
@@ -110,17 +110,18 @@ export default function Challenges({ navigation }) {
   }, []);
 
   const retryAlert = () => {
+    
     const removeValue = async () => {
       //재도전하기 버튼누르면 'checkclick'정보초기화
       try {
-        //await AsyncStorage.removeItem("checkclick");
-        await AsyncStorage.clear();
+        await AsyncStorage.removeItem("checkclick");
+        setShow(true);
         console.log("done");
       } catch (e) {
-        console.log(e);
+        console.log("dont");
       }
     };
-
+    
     Alert.alert("재도전", "정말 재도전하실건가요?", [
       {
         text: "취소",
@@ -128,8 +129,9 @@ export default function Challenges({ navigation }) {
         style: "cancel",
       },
 
-      { text: "확인", onPress: removeValue },
+      { text: "확인", onPress: removeValue } //확인 누를시 정보초기화 and 도전화면
     ]);
+    
   };
 
   return (
@@ -184,8 +186,8 @@ export default function Challenges({ navigation }) {
               </View>
             ))}
           </View>
-          <Button title="재도전하기" onPress={retryAlert } />
-            
+
+          <Button title="재도전하기" onPress={retryAlert}/>
           </ScrollView>
           <Modal animationType="slide" transparent={true} visible={showModal}>
             <View style={styles.modalBackground}>
@@ -199,9 +201,29 @@ export default function Challenges({ navigation }) {
                       marginTop: 10,
                       borderRadius: 5,
                     }}
-                    onPress={closeModal}
+                    onPress={retryAlert}
                   >
-                    <Text style={{ fontSize: 20 }}>닫기</Text>
+                    <Text style={{ fontSize: 20 }}>재도전</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
+          <Modal animationType="slide" transparent={true} visible={showFailModal}>
+            <View style={styles.modalBackground}>
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <Text style={{ fontSize: 30 }}>실패!</Text>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: "lightgray",
+                      padding: 10,
+                      marginTop: 10,
+                      borderRadius: 5,
+                    }}
+                    onPress={retryAlert}
+                  >
+                    <Text style={{ fontSize: 20 }}>재도전</Text>
                   </TouchableOpacity>
                 </View>
               </View>

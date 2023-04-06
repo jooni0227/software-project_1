@@ -154,7 +154,6 @@ const FormComponent = ({ onSubmit, initialData }) => {
 };
 
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
