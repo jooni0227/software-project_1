@@ -5,7 +5,7 @@ import moment from 'moment';
 import {BarChart} from 'react-native-chart-kit';
 
 
-const MyComponent = () => {
+export default function Calender({navigation}){
 
   
   const [selectedDay, setSelectedDay] = useState(null);
@@ -153,7 +153,7 @@ const FormComponent = ({ onSubmit, initialData }) => {
   );
 };
 
-export default MyComponent;
+
 
 const styles = StyleSheet.create({
   container: {
