@@ -1,172 +1,153 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ScrollView, Alert} from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import CalendarPicker from 'react-native-calendar-picker';
-import moment from 'moment';
+import * as SQLite from 'expo-sqlite';
 import {BarChart} from 'react-native-chart-kit';
 
+const db = SQLite.openDatabase('mydb.db');
 
-export default function Calender({navigation}){
+db.transaction((tx) => {
+  tx.executeSql(
+    'CREATE TABLE IF NOT EXISTS abctable (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT NOT NULL, soju TEXT, beer TEXT, whisky TEXT, wine TEXT)'
+  );
+});
 
-  
-  const [selectedDay, setSelectedDay] = useState(null);
-  const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({});
+export default function CalendarScreen() {
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [soju, setSoju] = useState('');
+  const [beer, setBeer] = useState('');
+  const [whisky, setWhisky] = useState('');
+  const [wine, setWine] = useState('');
 
+  const [text, setText] = useState('');
+  const [chartData, setChartData] = useState(null);
 
-
-  const handleDateSelect = (date) => {
-    setSelectedDay(date);
-    if(formData && formData[moment(date).format('MM/DD/YYYY')]){
-      setShowForm(false);
-    }else{
-      setShowForm(true);
-    }
-    
+  const insertData = () => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        'INSERT INTO abctable (date, soju, beer, whisky, wine) VALUES (?, ?, ?, ?, ?)',
+        [selectedDate.toString(), soju, beer, whisky, wine],
+        (_, { rowsAffected }) => {
+          if (rowsAffected > 0) {
+            console.log('Data inserted successfully!');
+          }
+        },
+        (tx, error) => {
+          console.log(`Error inserting data: ${error}`);
+        }
+      );
+    });
   };
 
-  const handleFormSubmit = (data) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [moment(selectedDay).format('MM/DD/YYYY')]: data,
-    }));
-    setShowForm(false);
+  const selectData = () => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        'SELECT soju, beer, whisky, wine FROM abctable WHERE date LIKE ?',
+        [selectedDate.toString()],
+        (_, { rows }) => {
+          if (rows.length > 0) {
+            const { soju, beer, whisky, wine } = rows.item(0);
+            const message = `Soju: ${soju}, Beer: ${beer}, Whisky: ${whisky}, Wine: ${wine}`;
+            const chartData = {
+              labels: ['소주', '맥주', '위스키', '와인'],
+              datasets: [
+                {
+                  data: [parseFloat(soju), parseFloat(beer), parseFloat(whisky), parseFloat(wine)],
+                  color: (opacity = 1) => `rgba(0, 0, 255, ${opacity})`,
+                },
+              ],
+            };
+            setChartData(chartData); // set the chart data as the state
+          
+            console.log(message);
+            setText(message);
+          } else {
+            console.log('No data found for this date.');
+            const message = 'No data found for this date.';
+            console.log(message);
+            setText(message);
+          }
+        },
+        (tx, error) => {
+          console.log(`Error selecting data: ${error}`);
+        }
+      );
+    });
   };
 
-  
+
   return (
     <ScrollView>
-    <View style={styles.container} >
-      <CalendarPicker onDateChange={handleDateSelect} />
-      {showForm && (
-        <View>
-          <Text style={styles.text}> {moment(selectedDay).format('MM')}월 {moment(selectedDay).format('DD')}일 </Text>
-          <FormComponent
-            onSubmit={handleFormSubmit}
-            initialData={formData[moment(selectedDay).format('MM/DD/YYYY')]}
-          />
-        </View>
-      )}
-       {formData[moment(selectedDay).format('MM/DD/YYYY')] && (
-        <View>
-          <Text style={styles.text}>Input data for {moment(selectedDay).format('MM/DD/YYYY')}:</Text>
-          <Text style={styles.text}>{JSON.stringify(formData[moment(selectedDay).format('MM/DD/YYYY')])}</Text>
-           <Text style={styles.text}>Total: {(
-             parseInt(formData[moment(selectedDay).format('MM/DD/YYYY')]['소주'])
-             +parseInt(formData[moment(selectedDay).format('MM/DD/YYYY')]['맥주'])
-             +parseInt(formData[moment(selectedDay).format('MM/DD/YYYY')]['위스키'])
-             +parseInt(formData[moment(selectedDay).format('MM/DD/YYYY')]['와인']))
-             /parseInt(formData[moment(selectedDay).format('MM/DD/YYYY')]['인원'])}</Text>
-
-              <BarChart
-        data={{
-          labels: ['소주', '맥주', '위스키', '와인'],
-          datasets: [
-            {
-              data: [parseInt(formData[moment(selectedDay).format('MM/DD/YYYY')]['소주']),
-              parseInt(formData[moment(selectedDay).format('MM/DD/YYYY')]['맥주']),
-              parseInt(formData[moment(selectedDay).format('MM/DD/YYYY')]['위스키']),
-              parseInt(formData[moment(selectedDay).format('MM/DD/YYYY')]['와인'])],
-            },
-          ],
-        }}
-
-        width={Dimensions.get('window').width}
-        height={220}
-        fromZero={true}
-        chartConfig={{
-          backgroundColor: '#1cc910',
-          backgroundGradientFrom: '#eff3ff',
-          backgroundGradientTo: '#efefef',
-          decimalPlaces: 2,
-          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          style: {
-            borderRadius: 16,
-          },
-        }}
-        style={{
-          marginVertical: 8,
-          borderRadius: 16,
+    <View style={{ backgroundColor: "white", flex: 1, padding: 20 }}>
+      <CalendarPicker
+        onDateChange={(date) => {
+          setSelectedDate(date);
         }}
       />
+      {selectedDate && (
+        <View style={{ marginTop: 20 }}>
+          <Text>Selected Date: {selectedDate.toString()}</Text>
+          <Text>{`\nSoju:`}</Text>
+          <TextInput
+            value={soju}
+            onChangeText={(text) => {
+              setSoju(text);
+            }}
+          />
+          <Text>{`\nBeer:`}</Text>
+          <TextInput
+            value={beer}
+            onChangeText={(text) => {
+              setBeer(text);
+            }}
+          />
+          <Text>{`\nWhisky:`}</Text>
+          <TextInput
+            value={whisky}
+            onChangeText={(text) => {
+              setWhisky(text);
+            }}
+          />
+          <Text>{`\nWine:`}</Text>
+          <TextInput
+            value={wine}
+            onChangeText={(text) => {
+              setWine(text);
+            }}
+          />
+          <TouchableOpacity onPress={insertData}>
+            <Text>{`\nInsert Data`}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={selectData}>
+            <Text>{`\nSelect Data`}</Text>
+          </TouchableOpacity>
         </View>
-    )}
+      )}
+        <Text>{text}</Text>
+        {chartData && (
+        <BarChart
+          data={chartData}
+          width={350}
+          height={220}
+          fromZero={true}
+          yAxisLabel=""
+          chartConfig={{
+            backgroundColor: '#1cc910',
+            backgroundGradientFrom: '#eff3ff',
+            backgroundGradientTo: '#efefef',
+            decimalPlaces: 2,
+            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            style: {
+              borderRadius: 16,
+            },
+          }}
+          style={{
+            marginVertical: 8,
+            borderRadius: 16,
+          }}
+        />
+        )}
     </View>
     </ScrollView>
   );
-};
-
-const FormComponent = ({ onSubmit, initialData }) => {
-  const [formData, setFormData] = useState(initialData || {});
-
-  const handleInputChange = (name, value) => {
-    if(isNaN(value)){
-      Alert.alert('Error','숫자로 입력해주세요.');
-    }
-    else{
-      setFormData((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    }
-  };
-
-  const handleSubmit = () => {
-    onSubmit(formData);
-  };
-
-  return (
-    <View>
-      <TextInput
-        style={styles.input}
-        placeholder="소주"
-        onChangeText={(value) => handleInputChange('소주', value)}
-        value={formData.input1}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="맥주"
-        onChangeText={(value) => handleInputChange('맥주', value)}
-        value={formData.input2}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="위스키"
-        onChangeText={(value) => handleInputChange('위스키', value)}
-        value={formData.input3}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="와인"
-        onChangeText={(value) => handleInputChange('와인', value)}
-        value={formData.input4}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="인원"
-        onChangeText={(value) => handleInputChange('인원', value)}
-        value={formData.input5}
-      />
-      <TouchableOpacity onPress={handleSubmit}>
-        <Text style={styles.text} >Submit</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: 10,
-  },
-  input:{
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
-  },
-  text:{
-    padding:10,
-    fontSize: 20,
-  }
-});
+}
