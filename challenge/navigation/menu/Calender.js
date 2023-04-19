@@ -8,7 +8,7 @@ const db = SQLite.openDatabase('mydb.db');
 
 db.transaction((tx) => {
   tx.executeSql(
-    'CREATE TABLE IF NOT EXISTS abctable (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT NOT NULL, soju TEXT, beer TEXT, whisky TEXT, wine TEXT)'
+    'CREATE TABLE IF NOT EXISTS calendartable (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT NOT NULL, soju TEXT, beer TEXT, whisky TEXT, wine TEXT)'
   );
 });
 
@@ -25,7 +25,7 @@ export default function CalendarScreen() {
   const insertData = () => {
     db.transaction((tx) => {
       tx.executeSql(
-        'INSERT INTO abctable (date, soju, beer, whisky, wine) VALUES (?, ?, ?, ?, ?)',
+        'INSERT INTO calendartable (date, soju, beer, whisky, wine) VALUES (?, ?, ?, ?, ?)',
         [selectedDate.toString(), soju, beer, whisky, wine],
         (_, { rowsAffected }) => {
           if (rowsAffected > 0) {
@@ -39,21 +39,25 @@ export default function CalendarScreen() {
     });
   };
 
-  const selectData = () => {
+  const selectData = (date) => {
     db.transaction((tx) => {
       tx.executeSql(
-        'SELECT soju, beer, whisky, wine FROM abctable WHERE date LIKE ?',
-        [selectedDate.toString()],
+        'SELECT soju, beer, whisky, wine FROM calendartable WHERE date LIKE ?',
+        [date.toString()],
         (_, { rows }) => {
           if (rows.length > 0) {
             const { soju, beer, whisky, wine } = rows.item(0);
-            const message = `Soju: ${soju}, Beer: ${beer}, Whisky: ${whisky}, Wine: ${wine}`;
+            const message = `소주: ${soju=='' ? 0 : soju}병, 맥주: ${beer=='' ? 0 : beer}병, 위스키: ${whisky=='' ? 0 : whisky}잔, 와인: ${wine=='' ? 0 : wine}잔`;
             const chartData = {
               labels: ['소주', '맥주', '위스키', '와인'],
               datasets: [
                 {
-                  data: [parseFloat(soju), parseFloat(beer), parseFloat(whisky), parseFloat(wine)],
-                  color: (opacity = 1) => `rgba(0, 0, 255, ${opacity})`,
+                  data: [parseInt(soju=='' ? 0 : soju), parseInt(beer=='' ? 0 : beer), parseInt(whisky=='' ? 0 : whisky), parseInt(wine=='' ? 0 : wine)],
+                  colors: [
+                    (opacity = 1) => `#03C04A`,
+                    (opacity = 1) => `#FBC901`,
+                    (opacity = 1) => `#A94007`,
+                    (opacity = 1) => `#940128`]
                 },
               ],
             };
@@ -62,7 +66,6 @@ export default function CalendarScreen() {
             console.log(message);
             setText(message);
           } else {
-            console.log('No data found for this date.');
             const message = 'No data found for this date.';
             console.log(message);
             setText(message);
@@ -82,10 +85,12 @@ export default function CalendarScreen() {
       <CalendarPicker
         onDateChange={(date) => {
           setSelectedDate(date);
+          selectData(date);
         }}
       />
-      {selectedDate && (
+      { text == "No data found for this date."&& selectedDate && (
         <View style={{ marginTop: 20 }}>
+        
           <Text>Selected Date: {selectedDate.toString()}</Text>
           <Text>{`\nSoju:`}</Text>
           <TextInput
@@ -118,33 +123,31 @@ export default function CalendarScreen() {
           <TouchableOpacity onPress={insertData}>
             <Text>{`\nInsert Data`}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={selectData}>
-            <Text>{`\nSelect Data`}</Text>
-          </TouchableOpacity>
         </View>
       )}
-        <Text>{text}</Text>
-        {chartData && (
+        {/* <Text>{text}</Text> */}
+        {text != "No data found for this date." && chartData && (
         <BarChart
           data={chartData}
           width={350}
-          height={220}
-          fromZero={true}
-          yAxisLabel=""
+          height={350}
           chartConfig={{
-            backgroundColor: '#1cc910',
-            backgroundGradientFrom: '#eff3ff',
-            backgroundGradientTo: '#efefef',
-            decimalPlaces: 2,
-            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-            style: {
-              borderRadius: 16,
-            },
+            backgroundColor: 'white',
+            backgroundGradientFrom: 'white',
+            backgroundGradientTo: 'white',
+            color: (opacity = 1) => `black`,
+            barRadius:20,
           }}
-          style={{
-            marginVertical: 8,
-            borderRadius: 16,
-          }}
+          fromZero={true}
+          withHorizontalLabels={false}
+          withCustomBarColorFromData={true}
+          flatColor={true}
+          showBarTops={false}
+          showValuesOnTopOfBars={true}
+          withInnerLines={false}
+          style={
+            {marginLeft: -25}
+          }
         />
         )}
     </View>
