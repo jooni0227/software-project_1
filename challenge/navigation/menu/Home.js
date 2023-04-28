@@ -1,22 +1,29 @@
-import React from 'react'
-import {View,Text,StyleSheet} from 'react-native';
+import React, { useState } from 'react';
+import { View, TextInput,Text, Button } from 'react-native';
+import {ref, set} from 'firebase/database';
+import {db} from './firebaseConfig'
 
 
-export default function Home({navigation}){
-    
-    return (
-        <View style={styles.container}>
-            <Text>Home 화면</Text>
-            
-        </View>
-    );
+export default function LoginScreen() {
+   const [id, setID] = useState('');
+   const [password, setPassword] = useState('');
+   
+   const handleLogin = () => {
+      set(ref(db,'users/'+id),{
+         id:id,
+         password: password
+      })
+         .then(() => console.log('data submitted'))
+         .catch(error => console.log(error));
+   }
+   
+   return (
+      <View>
+         <Text>ID:</Text>
+         <TextInput value={id} onChangeText={setID} />
+         <Text>Password:</Text>
+         <TextInput secureTextEntry value={password} onChangeText={setPassword} />
+         <Button title="Log in" onPress={handleLogin} />
+      </View>
+   );
 }
-
-const styles=StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "white",
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-})
