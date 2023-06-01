@@ -1,4 +1,3 @@
-Join.js
 import React, { useState } from 'react';
 import { Text, View, StyleSheet, Image, Alert } from 'react-native';
 import {Button} from 'react-native';
@@ -17,6 +16,7 @@ export default function Join({navigation}) {
     const [nickname, setNickname] = useState('');
     const [isClicked, setIsClicked] = useState(false);
     const [btnClicked, setBtnClicked] = useState(false);
+    const [isDriverClicked, setIsDriverClicked] = useState(false); // 이거 내가 변경
 
     const insertData = () => {
         db.transaction((txt) => {
@@ -40,7 +40,7 @@ export default function Join({navigation}) {
         Alert.alert('빈칸을 모두 채워주세요.');
         return;
     }
-    if(!btnClicked){
+    if(!isDriverClicked){ // 여기 내가 변경
       Alert.alert("대리기사와 일반회원 중 선택해주세요.");
       return;
     }
@@ -211,8 +211,11 @@ export default function Join({navigation}) {
           unfillColor="#FFFFFF"
           text="대리기사"
           iconStyle={{ borderColor: "red" }}
-          onPress={() => setBtnClicked(!btnClicked)}
-          isClicked={isClicked}/>
+          onPress={() => {
+            setBtnClicked(!btnClicked);
+            setIsDriverClicked(!isDriverClicked);
+          }}
+          isClicked={isDriverClicked} /*내가 수정*//>
           </View>
           <View style={styles.c2}>
           <BouncyCheckbox
@@ -221,8 +224,11 @@ export default function Join({navigation}) {
           unfillColor="#FFFFFF"
           text="일반회원"
           iconStyle={{ borderColor: "red" }}
-          onPress={() => setBtnClicked(!btnClicked)}
-          isClicked={isClicked}/>
+          onPress={() => {
+            setBtnClicked(btnClicked);
+            setIsDriverClicked(!isDriverClicked);
+          }}
+          isClicked={isDriverClicked}/*내가 수정*//>
       </View>      
       </View>
       <View style={styles.check}>
