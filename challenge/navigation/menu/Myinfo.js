@@ -22,6 +22,7 @@ db.transaction((txt) => {
 });
 
 export let sharedID = ''; // 닉네임 공유
+export let sharedRole = '';
 
 export default function Myinfo() {
   const [id, setId] = useState('');
@@ -33,7 +34,7 @@ export default function Myinfo() {
     return new Promise((resolve, reject) => {
       db.transaction((txt) => {
         txt.executeSql(
-          'SELECT pw, nickname FROM users WHERE id LIKE ?',
+          'SELECT pw, nickname, role FROM role WHERE id LIKE ?',
           [id.toString()],
           (_, { rows }) => {
             resolve(rows);
@@ -64,6 +65,7 @@ export default function Myinfo() {
 
         if (message.pw === pw) {
           sharedID = message.nickname;
+          sharedRole = message.role;
           setLoginStatus(false);
         } else {
           Alert.alert('아이디 혹은 비밀번호가 틀렸습니다.\n다시 로그인 해주세요.');
