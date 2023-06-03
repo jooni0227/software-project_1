@@ -20,7 +20,7 @@ export default function Community() {
   const inputWidth = width * 0.85; 
   const inputHeight = height * 0.05;
   const inputWidth2=width*0.97;
-  const inputHeight2 = height * 0.66;
+  const inputHeight2 = height * 0.55;
 
   useEffect(() => {
     const postsRef = ref(db, 'posts');
@@ -201,19 +201,26 @@ export default function Community() {
           <TouchableWithoutFeedback onPress={handlePressOutside}>
             <View style={styles.container2}>
               <View style={{ flexDirection: "row",justifyContent: 'space-between',marginBottom:30,marginRight:10, }}>
-                <TouchableOpacity onPress={closeModal}>
+                <TouchableOpacity onPress={closeModal} style={{marginLeft:7}}>
                   <AntDesign name="close" size={27} color="black" />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={doPost}>
                   <Text style={styles.postbtn}>등록</Text>
                 </TouchableOpacity>
               </View>
-              
-              <Text style={{fontSize:20,fontWeight:'bold',marginLeft:12,marginTop:20,}}>제목</Text>
+              <Text style={{fontSize:20,fontWeight:'bold',marginLeft:12}}>제목</Text>
               <TextInput ref={textInputRef} style={[styles.inputtitle,{width:inputWidth2}]} value={title} placeholder='제목을 입력하세요' onChangeText={setTitle} />
               <Text style={{fontSize:20,fontWeight:'bold',marginLeft:12,marginTop:10,}}>내용</Text>
               <TextInput ref={textInputRef} style={[styles.inputcontent,{width:inputWidth2, height:inputHeight2}]} multiline={true} value={content} placeholder='내용을 입력하세요' onChangeText={setContent} />
-              
+              <View>
+                <Text style={{fontSize:15,fontWeight:'bold',color:'gray',marginLeft:20,marginTop:5}}>커뮤니티 이용수칙</Text>
+                <Text style={styles.rule}>즐겁고 건강한 커뮤니티를 위해 다음과 같은 이용수칙을 준수해 주시기 바랍니다.</Text>
+                <Text style={styles.rule}>1. 상호 존중</Text>
+                <Text style={styles.rule}>2. 비방 및 모욕 금지</Text>
+                <Text style={styles.rule}>3. 정치 및 사회 관련 행위 금지</Text>
+                <Text style={styles.rule}>4. 스팸 및 광고 금지</Text>
+                <Text style={styles.rule}>5. 서로 도움과 협력</Text>
+              </View>
             </View>
           </TouchableWithoutFeedback>
         </Modal>
@@ -412,5 +419,11 @@ const styles = StyleSheet.create({
   postbtn:{
     fontWeight:'bold',
     fontSize:20,
+  },
+  rule:{
+    marginTop:5,
+    marginLeft:20,
+    fontSize:11,
+    color:'gray',
   }
 });
