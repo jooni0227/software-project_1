@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View , Text, TouchableOpacity, ScrollView , Alert} from 'react-native';
+import { StyleSheet, View , Text, TouchableOpacity, ScrollView , Alert, ActivityIndicator} from 'react-native';
 import {ref, set, onValue, off, remove, update } from 'firebase/database';
 import {db} from '../firebaseConfig';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -102,10 +102,8 @@ export default function AcceptCall({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.text}>
-                <Text>매칭 신호 보내는중</Text>
-            </View>
-            
+            <Text style={{marginBottom: 10}}>손님과의 연결을 기다리는중...</Text>
+            <ActivityIndicator size="large" color="blue" />
         </View>
         
     );
@@ -116,7 +114,7 @@ const styles=StyleSheet.create({
         flex:1,
         backgroundColor:'white',
         justifyContent: 'center',
-        alignContent: 'center',
+        alignItems: 'center',
     },
     maps: {
         flex: 4,

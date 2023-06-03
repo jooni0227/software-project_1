@@ -72,7 +72,7 @@ export default function ChooseLocation({navigation}){
                     style={styles.donebtn}
                     onPress={onDone}
                 >
-                    <Text>완료</Text>
+                    <Text style={{color: 'white', fontSize: 15}}>완료</Text>
                 </TouchableOpacity>
             </ScrollView>
         </View>
@@ -103,7 +103,9 @@ const styles=StyleSheet.create({
         justifyContent: 'center',
         marginTop: 10,
         padding: 10,
-        marginRight: 10,
-        marginLeft: 10,
+        marginRight: 3,
+        marginLeft: 3,
+        backgroundColor: '#43AA47',
+        borderColor: '#43AA47',
     }
 })

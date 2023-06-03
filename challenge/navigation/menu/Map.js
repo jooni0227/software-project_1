@@ -154,26 +154,26 @@ export default function Map({ navigation }) {
       )}
 
       {checkdest == 0 && (<View style={styles.box}>
-        <Text>{userId}</Text>
+        <Text style={styles.textstyle}>{userId}</Text>
         <TouchableOpacity 
           style={styles.inputstyle}
           onPress={onPressLocation}
           >
-          <Text>목적지를 입력하세요</Text>
+          <Text style={{color: 'white', fontSize: 15}}>목적지를 입력하세요</Text>
         </TouchableOpacity>
         
       </View>)}
 
-      {checkdest != 0 && (<View style={styles.box}>
-        <Text>{userId}</Text>
-        <Text>목적지: {destname}</Text>
-        <Text>시간</Text>
-        <Text>비용</Text>
+      {checkdest != 0 && (<View style={styles.anotherBox}>
+        {/* <Text style={styles.textstyle}>{userId}</Text> */}
+        <Text style={{marginLeft: 10, fontSize: 20, marginTop: 15}}>목적지: {destname}</Text>
+        <Text style={{marginLeft: 10, fontSize: 20}}>예상시간: 30분</Text>
+        <Text style={{marginLeft: 10, fontSize: 20, marginBottom: 13}}>예상비용: 20000원</Text>
         <TouchableOpacity 
           style={styles.inputstyle}
           onPress={requestCall}
           >
-          <Text>콜 하시겠습니까???</Text>
+          <Text style={{color: 'white', fontSize: 15}}>콜 하시겠습니까???</Text>
         </TouchableOpacity>
         
       </View>)}   
@@ -196,6 +196,13 @@ const styles = StyleSheet.create({
     flex: 1,
     width:'100%',
     backgroundColor:'white',
+    borderRadius: 30,
+  },
+  anotherBox: {
+    flex: 1.5,
+    width:'100%',
+    backgroundColor:'white',
+    borderRadius: 30,
   },
   inputstyle: {
     borderRadius: 4,
@@ -203,9 +210,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     hight: 48,
     justifyContent: 'center',
-    marginTop: 10,
-    padding: 10,
+    marginTop: 5,
+    padding: 15,
     marginRight: 10,
     marginLeft: 10,
-  }
+    backgroundColor: '#43AA47',
+    borderColor: '#43AA47',
+  },
+  textstyle:{
+    fontSize:30,
+    padding: 15,
+  },
 });

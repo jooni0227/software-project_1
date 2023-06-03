@@ -34,7 +34,7 @@ export default function ShowLocation({ navigation }) {
                 style={styles.inputstyle}
                 onPress={onDone}
                 >
-                    <Text>목적지로 설정</Text>
+                    <Text style={{color: 'white', fontSize: 15}}>목적지로 설정</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -44,7 +44,7 @@ export default function ShowLocation({ navigation }) {
 const styles=StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor:'white',
+        //backgroundColor:'white',
     },
     maps: {
         flex: 4,
@@ -53,7 +53,9 @@ const styles=StyleSheet.create({
     },
     check:{
         flex: 1,
+        width:'100%',
         backgroundColor:'white',
+        borderRadius: 30,
     },
     inputstyle:{
         borderRadius: 4,
@@ -61,9 +63,11 @@ const styles=StyleSheet.create({
         alignItems: 'center',
         hight: 48,
         justifyContent: 'center',
-        marginTop: 50,
-        padding: 10,
+        marginTop: 40,
+        padding: 15,
         marginRight: 10,
         marginLeft: 10,
+        backgroundColor: '#43AA47',
+        borderColor: '#43AA47',
     }
 })

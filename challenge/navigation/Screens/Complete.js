@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View , Text, TouchableOpacity, ScrollView , Alert} from 'react-native';
+import { StyleSheet, View , Text, TouchableOpacity, ScrollView , Alert, ActivityIndicator} from 'react-native';
 import {ref, set, onValue, off, remove, update } from 'firebase/database';
 import {db} from '../menu/firebaseConfig';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -91,9 +91,8 @@ export default function Complete({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.text}>
-                <Text>대리기사 호출중</Text>
-            </View>
+            <Text style={{marginBottom: 10}}>근처의 기사님을 기다리고 있습니다!</Text>
+            <ActivityIndicator size="large" color="blue" />
         </View>
         
         );
@@ -104,7 +103,7 @@ const styles=StyleSheet.create({
         flex:1,
         backgroundColor:'white',
         justifyContent: 'center',
-        alignContent: 'center',
+        alignItems: 'center',
     },
     maps: {
         flex: 4,

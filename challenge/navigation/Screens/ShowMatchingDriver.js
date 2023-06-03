@@ -133,10 +133,10 @@ export default function ShowMatchingDriver({ navigation }) {
                 style={styles.inputstyle}
                 onPress={onPressArrive}
                 >
-                <Text>도착했음을 알리기</Text>
+                <Text style={{color: 'white', fontSize: 15}}>도착했음을 알리기</Text>
                 </TouchableOpacity>
             
-        </View>
+            </View>
 
             
         </View>
@@ -165,9 +165,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     hight: 48,
     justifyContent: 'center',
-    marginTop: 10,
-    padding: 10,
+    marginTop: 5,
+    padding: 15,
     marginRight: 10,
     marginLeft: 10,
+    backgroundColor: '#43AA47',
+    borderColor: '#43AA47',
   }
 });
