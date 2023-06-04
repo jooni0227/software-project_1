@@ -190,7 +190,7 @@ export default function Challenges({ navigation }) {
                       disabled={index !== clickableIndex}
                     >
                       <Image
-                        source={state ? require("../../assets/false.png") : index === clickableIndex ? require("../../assets/true.png") : require("../../assets/true.png")}
+                        source={index < clickableIndex ? require("../../assets/false.png") : require("../../assets/true.png")}
                         style={{ width: 24, height:80 }}
                       />
                       <Text style={{ color: 'black', fontSize: 20 }}>{index + 1}</Text>
