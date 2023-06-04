@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, Image, Button, Alert,TouchableOpacity,Platform,Dimensions } from 'react-native';
+import { Text, View, StyleSheet, Image, Button, Alert,TouchableOpacity,Platform,Dimensions,ScrollView} from 'react-native';
 import { Div, Input } from 'react-native-magnus';
 import * as SQLite from 'expo-sqlite';
 import { useNavigation } from '@react-navigation/native';
@@ -222,7 +222,7 @@ export default function Myinfo() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       
       {loginStatus ? (
         <>
@@ -233,19 +233,20 @@ export default function Myinfo() {
                     resizeMode="contain"
                   />
         <View style={styles.green}>
-          <Input
+        <Input
             mx="xl"
             mt="md"
             px="md"
             py="sm"
-            borderColor="gray200"
-            borderWidth={2}
+            borderColor="beige"
             value={id}
+            bg="beige"
+            borderBottomColor="black"
             onChangeText={(text) => setId(text)}
             prefix={
               <Div row alignItems="center">
-                <Button title="ID  " bg="white" alignItems="center" color="black" />
-                <Div bg="gray200" w={1} h={25} ml="sm" />
+                <Button title="ID   " bg="white" alignItems="center" color="black" />
+                <Div bg="black" w={1} h={25} ml="sm" />
               </Div>
             }
             keyboardType="email-address"
@@ -255,33 +256,33 @@ export default function Myinfo() {
             mt="md"
             px="md"
             py="sm"
-            borderColor="gray200"
-            borderWidth={2}
+            borderColor="beige"
             value={pw}
+            bg="beige"
+            borderBottomColor="black"
             onChangeText={(text) => setPw(text)}
             prefix={
               <Div row alignItems="center">
                 <Button title="PW" bg="white" alignItems="center" color="black" />
-                <Div bg="gray200" w={1} h={25} ml="sm" />
+                <Div bg="black" w={1} h={25} ml="sm" />
               </Div>
             }
             secureTextEntry={true}
           />
           <TouchableOpacity onPress={() => navigation.navigate('Join')}> 
             <View>
-              <Text style={{marginTop:10, marginRight:40, textAlign:'right',fontSize: 18,color:'black', textDecorationLine: 'underline'}}>{"회원가입"}</Text>
+              <Text style={{marginTop:15, marginRight:25, textAlign:'right',fontSize: 18,color:'black', textDecorationLine: 'underline'}}>{"회원가입"}</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={handlePress}> 
             <View style={styles.login}>
-              <Text style={{textAlign:'center',fontSize: 30,color:'white'}}>{"로그인"}</Text>
+              <Text style={{textAlign:'center',fontSize: 25,color:'white'}}>{"로그인"}</Text>
             </View>
           </TouchableOpacity>
-          
           </View>
         </>
       ) : (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.info}>
         <Text style={styles.infotext}>
           안녕하세요 {sharedID}님!
@@ -313,6 +314,7 @@ export default function Myinfo() {
           withInnerLines={false}
           style={{
             marginLeft: -25,
+            marginTop:-30
           }}
         />
         )}
@@ -330,7 +332,7 @@ export default function Myinfo() {
           금주 도전하기{"\n"}
           {selectedDday !== null ? `D+${remainingDays}` : ""}
         </Text>
-        <Image style={styles.logo2} source={require('../../assets/hand.png')} />
+        <Image style={styles.logo} source={require('../../assets/hand.png')} />
         </View>
         <TouchableOpacity onPress={startChallenge} style={styles.button}>
           <Text style={styles.buttonText}>시작하기</Text>
@@ -351,15 +353,16 @@ export default function Myinfo() {
         </TouchableOpacity>
       </View>
       </View>
-    </View>
+    </ScrollView>
       )}
-    </View>
+    </ScrollView>
+
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1.5,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#ffffff',
@@ -379,8 +382,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   logo: {
-    width: 100,
-    height: 100,
+    width: 25,
+    height: 25,
   },
   images: {
     flexDirection: 'row',
@@ -474,21 +477,21 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   logout:{
-    marginTop:50,
+    marginTop:30,
     textAlign: 'center',
     color:"green",
     fontWeight:"bold",
     fontSize:19,
   },
   good:{
-    marginTop:100,
+    marginTop:14,
     width: 200,
     height: 200,
     alignSelf: 'center',
   },
   green:{
     width:Dimensions.get("window").width,
-    height:1200,
+    height:1000,
     paddingTop:80,
     backgroundColor:'beige', 
     borderTopLeftRadius:100,
@@ -497,9 +500,10 @@ const styles = StyleSheet.create({
   login:{
     justifyContent: "center",
     margin:20,
+    marginTop:70,
     height:50,
     padding:10,
     backgroundColor:'#43AA47',
-    borderRadius:100,
+    borderRadius:5,
   },
 });
