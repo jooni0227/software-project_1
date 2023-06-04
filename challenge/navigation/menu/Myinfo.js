@@ -84,6 +84,7 @@ export default function Myinfo() {
         text: "예",
         onPress: async () => {
           setLoginStatus(true);
+          setId("");
           setPw("");
         },
       },
@@ -100,24 +101,6 @@ export default function Myinfo() {
   const [remainingDays, setRemainingDays] = useState(null);
   const [chartData, setChartData] = useState(null);
   const [MDrink, setMDrink] = useState("");
-  const currentMonth = format(date, 'MMMM');
-  const currentDateTime = format(date, 'yyyy년 MM월 dd일 HH:mm');
-
-
-  const handleChallengesPress = () => {
-    navigation.navigate('Challenges');
-  };
-
-  const handleCommunityPress = () => {
-    navigation.navigate('Community');
-  };
-
-  const handleDriverPress = () => {
-    navigation.navigate('Driver');
-  };
-  const handleCalenderPress = () => {
-    navigation.navigate('Calender');
-  };
 
 
   const calculateRemainingDays = () => {
@@ -204,9 +187,6 @@ export default function Myinfo() {
     setMode(currentMode);
   };
 
-  const showDatePicker = () => {
-    showMode('date');
-  };
 
   const completeDateSelection = () => {
     setSelectedDday(null);

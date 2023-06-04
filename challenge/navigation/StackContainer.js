@@ -12,7 +12,6 @@ import ShowLocation from './menu/Maps/ShowLocation';
 import Map from './menu/Map';
 import DriverSelect from './Screens/DriverSelect';
 import Join from './Screens/Join';
-import Login from './Screens/Login';
 import Driver from './menu/Driver';
 import AcceptCall from './menu/Maps/AcceptCall';
 import Scan from './Screens/Scan';
@@ -29,7 +28,6 @@ const chooselocation="ChooseLocation";
 const showLocation="ShowLocation";
 const map="Map"
 const join="Join"
-const login="Login"
 const driverselect="DriverSelect"
 const driver="Driver"
 const acceptcall="AcceptCall";
@@ -51,7 +49,6 @@ export default function StackContainer(){
             <Stack.Screen name={chooselocation} component={ChooseLocation} options={{}}/>
             <Stack.Screen name={showLocation} component={ShowLocation} options={{}}/>
             <Stack.Screen name={map} component={Map} options={{}}/>
-            <Stack.Screen name={login} component={Login} options={{}}/>
             <Stack.Screen name={join} component={Join} options={{}}/>
             <Stack.Screen name={driverselect} component={DriverSelect} options={{}}/>
             <Stack.Screen name={driver} component={Driver} options={{}}/>
