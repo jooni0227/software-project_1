@@ -1,15 +1,13 @@
-Login.js
 import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Platform, Button, TouchableOpacity, Image } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { BarChart } from 'react-native-chart-kit';
 import * as SQLite from 'expo-sqlite';
 import { format } from 'date-fns';
-
+import { sharedID } from "../menu/Myinfo";
 
 export default function Login({ navigation }) {
   const route = useRoute();
-  const { id } = route.params;
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
@@ -139,7 +137,7 @@ export default function Login({ navigation }) {
     <View style={styles.container}>
       <View style={styles.info}>
         <Text style={styles.infotext}>
-          안녕하세요 {id}님!
+          안녕하세요 {sharedID}님!
         </Text>
       </View>
       <View style={styles.graph}>
