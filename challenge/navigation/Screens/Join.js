@@ -21,7 +21,7 @@ export default function Join({navigation}) {
     const insertData = () => {
         db.transaction((txt) => {
           txt.executeSql(
-            'INSERT INTO role (name, age, address, id, pw, nickname, role) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            'INSERT INTO final123 (name, age, address, id, pw, nickname, role) VALUES (?, ?, ?, ?, ?, ?, ?)',
             [name, age, address, id, pw, nickname, btnClicked ? '대리기사' : '일반회원'],
             (_, { rowsAffected }) => {
               if (rowsAffected > 0) {

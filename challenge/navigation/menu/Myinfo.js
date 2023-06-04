@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, Image, Button, Alert,TouchableOpacity,Platform } from 'react-native';
+import { Text, View, StyleSheet, Image, Button, Alert,TouchableOpacity,Platform,Dimensions } from 'react-native';
 import { Div, Input } from 'react-native-magnus';
 import * as SQLite from 'expo-sqlite';
 import { useNavigation } from '@react-navigation/native';
@@ -10,8 +10,7 @@ const db = SQLite.openDatabase('user.db');
 
 db.transaction((txt) => {
   txt.executeSql(
-    'CREATE TABLE IF NOT EXISTS users (num INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, age INTEGER, address TEXT, id TEXT, pw TEXT , nickname TEXT)',
-    // [],
+    'CREATE TABLE IF NOT EXISTS final123 (num INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, age INTEGER, address TEXT, id TEXT, pw TEXT , nickname TEXT, role TEXT)', // [],
     // (_, result) => {
     //   console.log('테이블 생성 완료');
     // },
@@ -34,7 +33,7 @@ export default function Myinfo() {
     return new Promise((resolve, reject) => {
       db.transaction((txt) => {
         txt.executeSql(
-          'SELECT pw, nickname, role FROM role WHERE id LIKE ?',
+          'SELECT pw, nickname, role FROM final123 WHERE id LIKE ?',
           [id.toString()],
           (_, { rows }) => {
             resolve(rows);
@@ -224,8 +223,16 @@ export default function Myinfo() {
 
   return (
     <View style={styles.container}>
+      
       {loginStatus ? (
         <>
+
+        <Image 
+                    style={styles.good} 
+                    source={require('../../assets/good.png')}
+                    resizeMode="contain"
+                  />
+        <View style={styles.green}>
           <Input
             mx="xl"
             mt="md"
@@ -237,7 +244,7 @@ export default function Myinfo() {
             onChangeText={(text) => setId(text)}
             prefix={
               <Div row alignItems="center">
-                <Button title="Id :" bg="white" alignItems="center" color="black" />
+                <Button title="ID  " bg="white" alignItems="center" color="black" />
                 <Div bg="gray200" w={1} h={25} ml="sm" />
               </Div>
             }
@@ -254,14 +261,24 @@ export default function Myinfo() {
             onChangeText={(text) => setPw(text)}
             prefix={
               <Div row alignItems="center">
-                <Button title="Pw :" bg="white" alignItems="center" color="black" />
+                <Button title="PW" bg="white" alignItems="center" color="black" />
                 <Div bg="gray200" w={1} h={25} ml="sm" />
               </Div>
             }
             secureTextEntry={true}
           />
-          <Button title="로그인" color="#00ff00" onPress={handlePress} />
-          <Button title="회원가입" color="#01A9DB" onPress={() => navigation.navigate('Join')} />
+          <TouchableOpacity onPress={() => navigation.navigate('Join')}> 
+            <View>
+              <Text style={{marginTop:10, marginRight:40, textAlign:'right',fontSize: 18,color:'black', textDecorationLine: 'underline'}}>{"회원가입"}</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handlePress}> 
+            <View style={styles.login}>
+              <Text style={{textAlign:'center',fontSize: 30,color:'white'}}>{"로그인"}</Text>
+            </View>
+          </TouchableOpacity>
+          
+          </View>
         </>
       ) : (
         <View style={styles.container}>
@@ -428,14 +445,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'right',
   },
-  logo:{
-    width:25,
-    height:25,
-  },
-  logo2:{
-    width:30,
-    height:30,
-  },
   timeText:{
     fontSize: 20,
     color: 'green',
@@ -470,5 +479,27 @@ const styles = StyleSheet.create({
     color:"green",
     fontWeight:"bold",
     fontSize:19,
-  }
+  },
+  good:{
+    marginTop:100,
+    width: 200,
+    height: 200,
+    alignSelf: 'center',
+  },
+  green:{
+    width:Dimensions.get("window").width,
+    height:1200,
+    paddingTop:80,
+    backgroundColor:'beige', 
+    borderTopLeftRadius:100,
+    borderTopRightRadius:100,
+  },
+  login:{
+    justifyContent: "center",
+    margin:20,
+    height:50,
+    padding:10,
+    backgroundColor:'#43AA47',
+    borderRadius:100,
+  },
 });
