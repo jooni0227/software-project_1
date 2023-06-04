@@ -179,7 +179,7 @@ export default function Community() {
         {Object.keys(post).reverse().map((key) => (
           <TouchableOpacity style={styles.container3} key={key} onPress={() => openPost(post[key])}>
             <View style={{flexDirection:'row'}}>
-                  <Image style={styles.logo} source={require('../../assets/dog.png')}/>
+                  <Image style={styles.logo} source={require('../../assets/good.png')}/>
                   <Text style={styles.nickname}>{[post[key].nickname]}</Text>
             </View>
             <Text style={styles.timestamp}>{new Date(post[key].timestamp).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</Text>
@@ -237,7 +237,7 @@ export default function Community() {
                 </TouchableOpacity>
                 <ScrollView>
                 <View style={{flexDirection:'row'}}>
-                  <Image style={styles.logo} source={require('../../assets/dog.png')}/>
+                  <Image style={styles.logo} source={require('../../assets/good.png')}/>
                   <Text style={styles.nickname}>{selectedPost.nickname}</Text>
                 </View>
                 <Text style={styles.timestamp}>{new Date(selectedPost.timestamp).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</Text>
@@ -296,6 +296,7 @@ const styles = StyleSheet.create({
     marginTop:20,
     width:40,
     height:40,
+    resizeMode: 'contain',
     borderColor:'black',
     borderWidth: 0.5,
     borderRadius: 8,
