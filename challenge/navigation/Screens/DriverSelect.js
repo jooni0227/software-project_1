@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View , Text, TouchableOpacity, Dimensions} from 'react-native';
+import { StyleSheet, View , Text, TouchableOpacity, Dimensions, Image} from 'react-native';
 //import {ref, set, onValue} from 'firebase/database';
 //import {db} from '../firebaseConfig';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
@@ -20,7 +20,11 @@ export default function DriverSelect({ navigation }) {
         <View style={styles.container}>
             {(sharedRole == '대리기사') && <View style={styles.check}>
                 <View style={styles.container}>
-                    <Text>이미지</Text>
+                    <Image 
+                        style={styles.logo} 
+                        source={require('../../assets/driver.png')}
+                        resizeMode="contain"
+                    />
                 </View>
                 <TouchableOpacity 
                 style={styles.btn}
@@ -31,7 +35,11 @@ export default function DriverSelect({ navigation }) {
             </View>}
             {(sharedRole != '대리기사') && <View style={styles.check}>
                 <View style={styles.container}>
-                    <Text>이미지</Text>
+                    <Image 
+                        style={styles.logo} 
+                        source={require('../../assets/driver.png')}
+                        resizeMode="contain"
+                    />
                 </View>
                 <TouchableOpacity 
                 style={styles.btn}
@@ -48,6 +56,8 @@ const styles=StyleSheet.create({
     container:{
         flex:1,
         backgroundColor:'white',
+        alignItems: "center",
+        justifyContent: "center",
     },
     maps: {
         flex: 4,
@@ -77,5 +87,9 @@ const styles=StyleSheet.create({
         backgroundColor:'#43AA47', 
         borderTopLeftRadius:100,
         borderTopRightRadius:100,
+      },
+    logo:{
+        flex:1,
+        width:350
       },
 })
